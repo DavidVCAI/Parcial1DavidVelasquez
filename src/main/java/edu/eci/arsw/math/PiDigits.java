@@ -1,5 +1,8 @@
 package edu.eci.arsw.math;
 
+import java.util.ArrayList;
+import java.util.List;
+
 ///  <summary>
 ///  An implementation of the Bailey-Borwein-Plouffe formula for calculating hexadecimal
 ///  digits of pi.
@@ -18,33 +21,47 @@ public class PiDigits {
      * @param count The number of digits to return
      * @return An array containing the hexadecimal digits.
      */
-    public static byte[] getDigits(int start, int count) {
-        if (start < 0) {
-            throw new RuntimeException("Invalid Interval");
-        }
-
-        if (count < 0) {
-            throw new RuntimeException("Invalid Interval");
-        }
-
-        byte[] digits = new byte[count];
-        double sum = 0;
-
-        for (int i = 0; i < count; i++) {
-            if (i % DigitsPerSum == 0) {
-                sum = 4 * sum(1, start)
-                        - 2 * sum(4, start)
-                        - sum(5, start)
-                        - sum(6, start);
-
-                start += DigitsPerSum;
+    public static byte[] getDigits(int start, int count, int numThreads) {
+        List<PiThread> threads = new ArrayList<>();
+        byte[] fResult = new byte[count];
+        for(int i=start;i<numThreads;i++){
+            int p_start = (count / numThreads) * i;
+            int p_count = ((count / numThreads) * (i+1));;
+            if(i!=start){
+                p_start+=1;
+            }
+            if(i+1==numThreads){
+                if (p_count<count){p_count+=1;}
             }
 
-            sum = 16 * (sum - Math.floor(sum));
-            digits[i] = (byte) sum;
+            System.out.println("p_start: "+ p_start + " p_count: "+p_count);
+            PiThread p_thread = new PiThread(p_start, p_count);
+            threads.add(p_thread);
         }
 
-        return digits;
+        for (PiThread t:threads){
+            t.start();
+            System.out.println("Starting thread");
+            try{
+                t.join();
+            } catch (Exception e){}
+            
+        }
+        for (PiThread t:threads){
+            System.out.println("Looking in pidigits for the one that ends on "+t.count);
+            byte[] pByte = t.result;
+            System.out.println(pByte);
+
+            for(int i = t.original_start;i<t.count;i++){
+                // System.out.println("analyzing i="+i+" start "+t.original_start+ " count "+count);
+                // System.out.println(pByte[i]);
+
+                fResult[i]=pByte[i];
+            }
+        }
+        return fResult;
+
+
     }
 
     /// <summary>
