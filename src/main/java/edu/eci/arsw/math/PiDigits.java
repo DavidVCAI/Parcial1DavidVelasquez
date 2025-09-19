@@ -28,10 +28,10 @@ public class PiDigits {
         for(int i=start;i<numThreads;i++){
             int p_start = (count / numThreads) * i;
             int p_count = ((count / numThreads) * (i+1));;
-            if(i!=start){
-                p_start+=1;
-            }
-            if(i+1==numThreads && p_count<count){
+            // if(i!=start){
+            //     p_start+=1;
+            // }
+            if(i+1==numThreads){
                 p_count+=1;
             }
 
