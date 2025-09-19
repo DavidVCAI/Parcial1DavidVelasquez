@@ -22,6 +22,7 @@ public class PiDigits {
      * @return An array containing the hexadecimal digits.
      */
     public static byte[] getDigits(int start, int count, int numThreads) {
+        
         List<PiThread> threads = new ArrayList<>();
         byte[] fResult = new byte[count];
         for(int i=start;i<numThreads;i++){
@@ -30,12 +31,12 @@ public class PiDigits {
             if(i!=start){
                 p_start+=1;
             }
-            if(i+1==numThreads){
-                if (p_count<count){p_count+=1;}
+            if(i+1==numThreads && p_count<count){
+                p_count+=1;
             }
 
             System.out.println("p_start: "+ p_start + " p_count: "+p_count);
-            PiThread p_thread = new PiThread(p_start, p_count);
+            PiThread p_thread = new PiThread(p_start, p_count-p_start);
             threads.add(p_thread);
         }
 
@@ -52,11 +53,12 @@ public class PiDigits {
             byte[] pByte = t.result;
             System.out.println(pByte);
 
-            for(int i = t.original_start;i<t.count;i++){
+            for(int i = 0;i<t.count;i++){
                 // System.out.println("analyzing i="+i+" start "+t.original_start+ " count "+count);
                 // System.out.println(pByte[i]);
-
-                fResult[i]=pByte[i];
+                System.out.println("On position "+i);
+                System.out.println(pByte[i]);
+                fResult[i+t.original_start]=pByte[i];
             }
         }
         return fResult;
