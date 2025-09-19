@@ -35,7 +35,7 @@ public class PiDigits {
                 p_count+=1;
             }
 
-            System.out.println("p_start: "+ p_start + " p_count: "+p_count);
+            // System.out.println("p_start: "+ p_start + " p_count: "+p_count);
             PiThread p_thread = new PiThread(p_start, p_count-p_start);
             threads.add(p_thread);
         }
@@ -56,8 +56,8 @@ public class PiDigits {
             for(int i = 0;i<t.count;i++){
                 // System.out.println("analyzing i="+i+" start "+t.original_start+ " count "+count);
                 // System.out.println(pByte[i]);
-                System.out.println("On position "+i);
-                System.out.println(pByte[i]);
+                // System.out.println("On position "+i);
+                // System.out.println(pByte[i]);
                 fResult[i+t.original_start]=pByte[i];
             }
         }

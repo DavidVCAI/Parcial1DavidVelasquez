@@ -24,7 +24,7 @@ public class PiThread extends Thread {
         if (count < 0) {
             throw new RuntimeException("Invalid Interval");
         }
-        System.out.println("Executing PiThread from "+start+" to "+count);
+        System.out.println("Executing PiThread from "+start+" with count "+count);
 
         byte[] digits = new byte[count];
         double sum = 0;
@@ -44,7 +44,7 @@ public class PiThread extends Thread {
         }
 
         this.result= digits;
-        System.out.println("Finished executing run on the thread that ends on "+count);
+        System.out.println("Finished executing run on the thread that starts on "+original_start);
         System.out.println(this.result);
     }
 
